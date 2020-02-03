@@ -35,13 +35,13 @@ def extract_text(pdf_path):
         print()
             
     
-pdf_data = extract_text('food.pdf')
+pdf_data = extract_text('image2.pdf')
 
 
 ## DO SKRYPTU
 
-
-cd c:\Anaconda3\Scripts
-python pdf2txt.py -o e:\food.html c:\food.pdf
-python pdf2txt.py -o e:\food.xml c:\food.pdf
+#
+#cd c:\Anaconda3\Scripts
+#python pdf2txt.py -o e:\food.html c:\food.pdf
+#python pdf2txt.py -o e:\food.xml c:\food.pdf
 

@@ -30,7 +30,7 @@ def extract_pdf_page(filename):
     input_file_name = Path(filename).stem
     output_file_folder = Path(XML_PATH, input_file_name)
     output_file_folder.mkdir(parents=True, exist_ok=True)
-    output_file_path = Path(output_file_folder, TIME_NOW + input_file_name + "-xml") 
+    output_file_path = Path(output_file_folder, input_file_name + "-" + TIME_NOW + ".xml") 
     output_images_path = Path(XML_PATH, input_file_name, "images")
     output_images_path.mkdir(parents=True, exist_ok=True)  
     
