@@ -12,7 +12,7 @@ from tabulate import tabulate
 
 # PATH TO FILE 
 data_folder = Path(Path.cwd(),  "tables")
-dataset_path = Path(data_folder, "food.pdf")
+dataset_path = Path(data_folder, "long.pdf")
 
 
 
@@ -27,9 +27,9 @@ tables_tech = camelot.read_pdf(str(data_tech), pages="32", area=[269.875, 120.75
 
 # Find page with table
 
-for i in range(30,35):
+for i in range(0,4):
     print (i)
-    tables = camelot.read_pdf(str(data_tech), pages='%d' %  i)
+    tables = camelot.read_pdf("long.pdf", pages='%d' %  i)
     try:
         print (tabulate(tables[0].df))
         print (tabulate(tables[1].df))
