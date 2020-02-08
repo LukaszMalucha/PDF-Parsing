@@ -12,18 +12,7 @@ from operator import itemgetter
 import itertools
 import operator
 
-L = [
-[1376, 'B'],
-[1420, 'C'],
-[1449, 'Lorem'],
-[1478, 'Ipsum'],
-[1264, '0'],
-[1347, 'A'],
-[1376, 'BB'],
-[1420, 'CC'],
-[1449, '4'],
-[1478, '5'],]
-
+import csv
 
 def sort_strings(l):
     """Group strings by their page location in order to keep row together"""
@@ -31,24 +20,37 @@ def sort_strings(l):
     for string in l:
         if string[0] not in sorted_strings:
             sorted_strings[string[0]] = []
-        sorted_strings[string[0]].append(string[1:]) 
-        
-            
-        
+        sorted_strings[string[0]].append(string[1]) 
+               
     
     sorted_values = sorted(sorted_strings.items(), key=operator.itemgetter(0))
-    sorted_string_list = []
+    
+    sorts = []
     for element in sorted_values:
-        element[1] = element[1].reverse()
-        sorted_string_list.append([" | ".join(i) for i in element[1]])
+        sorts.append(list(reversed(element[1]))) 
         
-    sorts = []    
-    for x in sorted_string_list:
-        sorts.append(" | ".join(x))
         
-    return sorted_values    
+    # REMOVE TABLE STRINGS AND REPLACE THEM WITH "TABLE ROW" Message
+    sorted_string_list = []     
+    for element in sorts:
+        if len(element) > 1:
+            sorted_string_list.append("TABLE ROW")
+        else:
+            sorted_string_list.append(element[0])             
+        
+    return sorted_string_list
 
-asd = sort_strings(L)
+
+data = []
+
+with open('long.csv', 'r') as csvfile: 
+    reader = csv.reader(csvfile, skipinitialspace=True)
+    for val in reader:
+        data.append(" ".join(val))
+
+
+
+
 
 
 # Get Page count and page frames 
@@ -86,7 +88,6 @@ def text_per_page(soup, pages):
             if int(page_location) < 285:
                 spans = [ data for data in div.select('span') if 'font-size' in str(data)]
                 for span in spans:
-                    lst = []
                     font_size = re.search(r'(?is)(font-size:)(.*?)(px)',str(span.get('style'))).group(2)
                     tup = [str(span.text).strip(), int(font_size.strip())]
                     header_spans.append(tup)
@@ -98,12 +99,11 @@ def text_per_page(soup, pages):
                   
         page_text_sorted = sort_strings(page_text)
         pages_dict["Page " + str(page[0])] = page_text_sorted
-   
     title = max(header_spans,key=itemgetter(1))[0]    # biggest font in a header 
     pages_dict["Page 1"].remove(title) # Remove first matching element to avoid duplicate title
     pages_dict["Title"] = title                 
     
-    return pages_dict     
+    return pages_dict    
 
 
 
@@ -123,6 +123,27 @@ def extract_text(filename):
 
 
 final = extract_text("long.html")
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    
+    
+
+
+
+
+
+
 
 
 

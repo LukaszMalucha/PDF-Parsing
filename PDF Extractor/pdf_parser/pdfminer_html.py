@@ -27,14 +27,14 @@ TIME_NOW = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
 
 # Folder Paths
 PDFS = list(Path(Path.cwd(),  "long").glob('*.pdf'))
-HTML_PATH = Path(Path.cwd(),  "htmls-" + CURRENT_DATE)
+HTML_PATH = Path(Path.cwd(),  "htmls")
 
 def extract_pdf_page(filename):
     input_file_name = Path(filename).stem
     # Paths for creating folder and file
     output_file_folder = Path(HTML_PATH, input_file_name)
     output_file_folder.mkdir(parents=True, exist_ok=True)
-    output_file_path = Path(output_file_folder, input_file_name + "-" + TIME_NOW + ".html") 
+    output_file_path = Path(output_file_folder, input_file_name + ".html") 
 
     
     output_file = io.StringIO()

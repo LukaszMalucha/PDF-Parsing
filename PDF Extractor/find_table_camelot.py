@@ -25,6 +25,7 @@ tables_list = []
 
     
 tables = camelot.read_pdf(str(file_path), pages="all")
+
 tables.export('long.csv', f='csv', compress=False)    
 tables[0].parsing_report    
 
@@ -34,3 +35,5 @@ for element in tables:
     tables_list.append(lists)
 
 dictus = tables[1].df.to_dict()
+
+
