@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Feb  7 13:05:56 2020
+Created on Sat Feb  8 17:21:03 2020
 
 @author: LukaszMalucha
 """
@@ -13,6 +13,10 @@ import itertools
 import operator
 
 import csv
+import json
+
+CURRENT_PATH = Path(Path.cwd(), "htmls")
+FOLDERS = [str(x) for x in CURRENT_PATH.iterdir() if x.is_dir()]  
 
 def sort_strings(l):
     """Group strings by their page location in order to keep row together"""
@@ -34,7 +38,9 @@ def sort_strings(l):
     sorted_string_list = []     
     for element in sorts:
         if len(element) > 1:
-            sorted_string_list.append("TABLE ROW")
+            " | ".join(element)
+            element[0] = "TABLE ROW: | " + element[0] + " | "
+            sorted_string_list.append(element[0])
         else:
             sorted_string_list.append(element[0])             
         
@@ -88,7 +94,6 @@ def text_per_page(soup, pages):
         page_text_sorted = sort_strings(page_text)
         pages_dict["Page " + str(page[0])] = page_text_sorted
     title = max(header_spans,key=itemgetter(1))[0]    # biggest font in a header 
-    pages_dict["Page 1"].remove(title) # Remove first matching element to avoid duplicate title
     pages_dict["Title"] = title                 
     
     return pages_dict    
@@ -97,8 +102,9 @@ def text_per_page(soup, pages):
 
   
 
-def extract_text(filename):
-    file_path = Path(Path.cwd(), filename)
+def extract_text(filename):  
+    input_file_name = Path(filename).stem
+    file_path = Path(Path.cwd(), "htmls", input_file_name, filename)
     
     # Turn html into bs.soup
     soup = bs.BeautifulSoup(open(str(file_path)), "lxml")
@@ -106,26 +112,31 @@ def extract_text(filename):
     pages = document_pages(soup)
     pages_text = text_per_page(soup, pages)
     
+    # Save data as json
+    output_txt_path = Path(Path.cwd() ,"text")
+    output_txt_path.mkdir(parents=True, exist_ok=True) 
+    text_file_path = Path(output_txt_path,  input_file_name + ".json")    
+    with open(text_file_path, 'w') as fp:
+        json.dump(pages_text, fp)
+        
+    
     return pages_text
-    
+
+extract_text("long.html")
+
+def text_extractor():
+    """Compiler for html text extraction"""
+    for folder in FOLDERS:
+        htmls = list(Path(folder).glob('*.html'))
+        tables = list(Path(folder, "tables").glob('*.csv'))
+        
+        for element in htmls:
+            extract_text(str(element))
+
+        
 
 
-final = extract_text("long.html")
-
-
-
-
-
-
-
-
-
-
-
-    
-    
-    
-    
+text_extractor()
 
 
 
@@ -140,5 +151,22 @@ final = extract_text("long.html")
 
 
 
-
+#
+#
+#def tables_to_dict(filename):
+#    """Extract csv table data to dictionary"""
+#    TABLES = list(Path(Path.cwd(),  "htmls", "long", "tables").glob('*.csv'))
+#
+#    tables_dict = {}
+#    
+#    
+#    for file in TABLES:
+#        data = []
+#        with open(str(file), 'r') as csvfile: 
+#            input_file_name = Path(file).stem
+#            reader = csv.reader(csvfile, skipinitialspace=True)
+#            for val in reader:
+#                data.append(" ".join(val))
+#        tables_dict[input_file_name] = data       
+        
 

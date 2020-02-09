@@ -11,7 +11,7 @@ from pdfminer.pdfdocument import PDFDocument
 
 from pdfminer.pdfinterp import resolve1
 
-file_path = Path(Path.cwd(), "long.pdf")
+file_path = Path(Path.cwd(), "image.pdf")
 
 file = open(str(file_path), 'rb')
 parser = PDFParser(file)
@@ -26,7 +26,19 @@ tables_list = []
     
 tables = camelot.read_pdf(str(file_path), pages="all")
 
-tables.export('long.csv', f='csv', compress=False)    
+
+for i in range(0,1):
+    print (i)
+    tables = camelot.read_pdf("image.pdf", pages='%d' %  i)
+    try:
+        print (tabulate(tables[0].df))
+        print (tabulate(tables[1].df))
+    except IndexError:
+        print('None')
+        
+        
+
+tables.export('image.csv', f='csv', compress=False)    
 tables[0].parsing_report    
 
 for element in tables:
